@@ -2,4 +2,4 @@
 ## Trabalho de Big Data
 ### Spark e Hadoop
 
-Entrega e apresentação: 12/09/2024
+Entrega e apresentação: 19/09/2024
