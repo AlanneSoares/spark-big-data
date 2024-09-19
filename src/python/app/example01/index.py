@@ -1,17 +1,39 @@
+from flask import Flask, render_template
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import *
-from pyspark.sql.types import *
 
-# Abrindo uma sessão para uso do spark
+# Inicializa o Flask
+app = Flask(__name__)
+
+# Abrindo uma sessão para uso do Spark
 spark = (
     SparkSession.builder
-    .master('local')
-    .appName('example01')
+    .master('local[*]')  # Usando todos os núcleos disponíveis
+    .appName('credit_card_transactions')
     .getOrCreate()
 )
 
-#Chamando o Data Frame baixado do Kaggle
-df = spark.read.csv('/resources/credit_card_transactions.csv', header=True, inferSchema=True)
+# Habilitar suporte para Arrow (melhora a eficiência)
+spark.conf.set("spark.sql.execution.arrow.pyspark.enabled", "true")
 
-# Exibindo a tabela
-df.show(5)
+@app.route('/')
+def index():
+    try:
+        # Carregando o DataFrame a partir do CSV (ajuste o caminho para o seu arquivo CSV)
+        df = spark.read.csv('C:/Users/Darly/Desktop/big-data/qtdCondutoresHabilitadosAgosto2024.csv', header=True, inferSchema=True)
+
+         # Limite opcional de linhas para evitar sobrecarga de memória
+        df = df.limit(100)
+
+        # Coleta os dados do Spark DataFrame como uma lista de dicionários
+        data = [row.asDict() for row in df.collect()]
+
+        # Obtém os nomes das colunas
+        columns = df.columns
+
+        # Renderiza o template HTML com os dados e colunas
+        return render_template('index.html', data=data, columns=columns)
+    except Exception as e:
+        return f'Error: {str(e)}', 500
+
+if __name__ == '__main__':
+    app.run(debug=True, port=5000)
