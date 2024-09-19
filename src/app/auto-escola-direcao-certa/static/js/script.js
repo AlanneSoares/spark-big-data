@@ -1,0 +1,1 @@
+alert('Bem-vindo(a) a Auto Escola Direção Certa. Aqui você encontra o total de alunos aprovados em nossa Auto Escola. Venha fazer parte você também!!!');
