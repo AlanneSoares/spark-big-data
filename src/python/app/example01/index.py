@@ -8,7 +8,7 @@ app = Flask(__name__)
 spark = (
     SparkSession.builder
     .master('local[*]')  # Usando todos os núcleos disponíveis
-    .appName('credit_card_transactions')
+    .appName('JADs Auto Escola ')
     .getOrCreate()
 )
 
@@ -19,7 +19,7 @@ spark.conf.set("spark.sql.execution.arrow.pyspark.enabled", "true")
 def index():
     try:
         # Carregando o DataFrame a partir do CSV (ajuste o caminho para o seu arquivo CSV)
-        df = spark.read.csv('C:/Users/Darly/Desktop/big-data/qtdCondutoresHabilitadosAgosto2024.csv', header=True, inferSchema=True)
+        df = spark.read.csv('qtdCondutoresHabilitadosAgosto2024.csv', header=True, inferSchema=True)
 
          # Limite opcional de linhas para evitar sobrecarga de memória
         df = df.limit(100)
