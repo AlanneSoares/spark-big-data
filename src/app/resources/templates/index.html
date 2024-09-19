@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flask PySpark Example</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Calcular Média com PySpark</h1>
+        <form method="POST">
+            <label for="numbers">Digite números separados por vírgula:</label>
+            <input type="text" id="numbers" name="numbers" required>
+            <button type="submit">Calcular</button>
+        </form>
+        {% if result is not none %}
+            <h2>Média: {{ result }}</h2>
+        {% endif %}
+    </div>
+</body>
+</html>
