@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, request, render_template
 from pyspark.sql import SparkSession
 
 # Inicializa o Flask
@@ -8,7 +8,7 @@ app = Flask(__name__)
 spark = (
     SparkSession.builder
     .master('local[*]')  # Usando todos os núcleos disponíveis
-    .appName('JADs Auto Escola ')
+    .appName('Auto Escola Direção Certa')
     .getOrCreate()
 )
 
@@ -19,10 +19,10 @@ spark.conf.set("spark.sql.execution.arrow.pyspark.enabled", "true")
 def index():
     try:
         # Carregando o DataFrame a partir do CSV (ajuste o caminho para o seu arquivo CSV)
-        df = spark.read.csv('qtdCondutoresHabilitadosAgosto2024.csv', header=True, inferSchema=True)
+        df = spark.read.csv('qtd_condutores_habilitados_agosto_2024.csv', header=True, inferSchema=True)
 
          # Limite opcional de linhas para evitar sobrecarga de memória
-        df = df.limit(100)
+        df = df.limit(50)
 
         # Coleta os dados do Spark DataFrame como uma lista de dicionários
         data = [row.asDict() for row in df.collect()]
@@ -34,6 +34,7 @@ def index():
         return render_template('index.html', data=data, columns=columns)
     except Exception as e:
         return f'Error: {str(e)}', 500
+
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
