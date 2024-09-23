@@ -10,6 +10,7 @@ spark = (
     .master('local[*]')  # Usando todos os núcleos disponíveis
     .appName('Auto Escola Direção Certa')
     .getOrCreate()
+    .getActiveSession()
 )
 
 # Habilitar suporte para Arrow (melhora a eficiência)
@@ -20,6 +21,10 @@ def index():
     try:
         # Carregando o DataFrame a partir do CSV (ajuste o caminho para o seu arquivo CSV)
         df = spark.read.csv('qtd_condutores_habilitados_agosto_2024.csv', header=True, inferSchema=True)
+
+        # Lendo arquivo a partir do HDFS
+        #file = "hdfs://localhost:9000/data/qtd_condutores_habilitados_agosto_2024.csv"
+        #df = spark.read.format("csv").option("header", "true").load(file)
 
          # Limite opcional de linhas para evitar sobrecarga de memória
         df = df.limit(50)
